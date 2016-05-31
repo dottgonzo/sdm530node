@@ -97,7 +97,7 @@ class SdM {
                         reject(err);
                     } else {
                         resolve(answer);
-
+console.log("log",answer);
                     }
 
                 });
