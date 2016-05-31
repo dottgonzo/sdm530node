@@ -73,13 +73,14 @@ class SdM {
                 function readReg(client, reg: number) {
                     console.log("reg", reg)
                     return new Promise(function(resolve, reject) {
-                        client.readInputRegisters(reg, 2).then(function(data) {
+                        client.readInputRegisters(reg, 2, function(data) {
                             console.log("regdata", data)
                             resolve(data.buffer.readFloatBE());
-                        }).catch(function(err) {
-                            console.log("regerr", err)
+                        }, function(err) {
+                            console.log(err)
                             reject(err);
-                        });
+                        })
+
                     });
 
                 }
