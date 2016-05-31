@@ -161,10 +161,7 @@ class SdM {
                 async.eachSeries(regs, function(iterator, cb) {
 
                         readReg(that.client, iterator.reg).then(function(d) {
-
                             answer[iterator.label + iterator.phase] = d;
-
-                            console.log(d);
                             cb();
                         }).catch(function(err) {
                             console.log(err);
