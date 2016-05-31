@@ -137,7 +137,7 @@ let regs = [
         phase: 0,
         reg: 74
     }
-]
+];
 
 function start() {
 
