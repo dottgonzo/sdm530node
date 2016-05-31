@@ -144,12 +144,15 @@ function start() {
     return new Promise(function(resolve, reject) {
         let answer = {};
 
-        async.each(regs, function(iterator) {
+        async.each(regs, function(iterator,cb) {
             readReg(iterator.reg).then(function(d) {
 
                 answer[iterator.label + iterator.phase] = d;
 
                 console.log(d);
+                cb();
+            }).catch(function(){
+                cb();
             });
         }, function(err) {
 
