@@ -25,7 +25,6 @@ let defaults = <Idefaults>{
 
 function data() {
 
-    return new Promise(function(resolve, reject) {
 
         if (pathExists.sync("./conf.json")) {
 
@@ -42,27 +41,17 @@ function data() {
                             defaults.dev = devis[i].dev;
                         }
                     }
-                    client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start().then(function(data) {
-                        resolve(data);
-                    }).catch(function(err) {
-                        reject(err);
-
-                    }));
+                    return client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
                 }).catch(function() {
                     throw "NO USB FOR SDM";
                 });
             }
 
         } else {
-            client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start().then(function(data) {
-                resolve(data);
-            }).catch(function(err) {
-                reject(err);
+                    return client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
 
-            }));
         }
 
-    });
 }
 
 function readReg(reg: number) {
