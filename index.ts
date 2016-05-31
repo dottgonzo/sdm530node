@@ -22,20 +22,7 @@ let defaults = <Idefaults>{
 };
 
 
-function readReg(client, reg: number) {
-    console.log("reg", reg)
-    return new Promise(function(resolve, reject) {
-        console.log("prom")
-        client.readInputRegisters(reg, 2).then(function(data) {
-            console.log("regdata", data)
-            resolve(data.buffer.readFloatBE());
-        }).catch(function(err) {
-            console.log("regerr", err)
-            reject(err);
-        });
-    });
 
-}
 
 
 
@@ -91,13 +78,13 @@ class SdM {
 
 
                 console.log("start");
-                      readReg(client, 0).then(function(d) {
-
-
-                        console.log(d);
-                    }).catch(function(err) {
-                        console.log(err);
-                    });
+                client.readInputRegisters(0, 2).then(function(data) {
+                    console.log("regdata", data)
+                    resolve(data.buffer.readFloatBE());
+                }).catch(function(err) {
+                    console.log("regerr", err)
+                    reject(err);
+                });
             }
 
 
