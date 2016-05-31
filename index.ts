@@ -44,7 +44,7 @@ if (pathExists.sync("./conf.json")) {
 }
 
 
-function readReg(client: any, reg: number) {
+function readReg(reg: number) {
     return new Promise(function(resolve, reject) {
         client.readInputRegisters(reg, 2).then(function(data) {
             resolve(data.buffer.readFloatBE());
@@ -57,13 +57,18 @@ function readReg(client: any, reg: number) {
 
 
 function start() {
-    client.connectRTU(defaults.dev, { baudrate: defaults.baud });
-    client.setID(defaults.address);
+    setTimeout(function() {
+
+        client.connectRTU(defaults.dev, { baudrate: defaults.baud });
+        client.setID(defaults.address);
 
 
-    readReg(client, 0).then(function(voltage) {
-        console.log(voltage);
-    });
+        readReg(0).then(function(voltage) {
+            console.log(voltage);
+        });
+
+    }, 1000);
+
 
 }
 
