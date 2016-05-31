@@ -22,12 +22,29 @@ let defaults = <Idefaults>{
 };
 
 
+function readReg(client, reg: number) {
+    console.log("reg", reg)
+    return new Promise(function(resolve, reject) {
+        client.readInputRegisters(reg, 2).then(function(data) {
+            console.log("regdata", data)
+            resolve(data.buffer.readFloatBE());
+        }).catch(function(err) {
+            console.log("regerr", err)
+            reject(err);
+        });
+    });
+
+}
+
+
+
+
+
 class SdM {
-    client;
+
     conf: Idefaults;
     constructor(conf?: Idefaults) {
 
-        this.client = new ModbusRTU();
         let that = this;
         if (conf) {
 
@@ -51,7 +68,7 @@ class SdM {
             }
 
         } else {
-            that.client.setID(defaults.address);
+
             that.conf = defaults;
 
 
@@ -61,40 +78,25 @@ class SdM {
 
         let that = this;
 
+        let client = new ModbusRTU();
+
+        client.setID(that.conf.address);
 
         return new Promise(function(resolve, reject) {
 
 
+
+            console.log(defaults);
+
+
             function start() {
-
-
-
-
-                function readReg(client, reg: number) {
-                    console.log("reg", reg)
-                    return new Promise(function(resolve, reject) {
-                        client.readInputRegisters(reg, 2, function(data) {
-                            console.log("regdata", data)
-                            resolve(data.buffer.readFloatBE());
-                        }, function(err) {
-                            console.log(err)
-                            reject(err);
-                        })
-
-                    });
-
-                }
-
-
-
-
 
 
                 console.log("start");
                 let answer = {};
 
                 async.each(regs, function(iterator, cb) {
-                    readReg(that.client, iterator.reg).then(function(d) {
+                    readReg(client, iterator.reg).then(function(d) {
 
                         answer[iterator.label + iterator.phase] = d;
 
@@ -117,9 +119,12 @@ class SdM {
 
             }
 
-            console.log(defaults)
 
-            that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
+
+
+
+
+            client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
         });
 
     }
