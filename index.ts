@@ -91,30 +91,13 @@ class SdM {
 
 
                 console.log("start");
-                let answer = {};
+                      readReg(client, 0).then(function(d) {
 
-                async.each(regs, function(iterator, cb) {
-                    readReg(client, iterator.reg).then(function(d) {
-
-                        answer[iterator.label + iterator.phase] = d;
 
                         console.log(d);
-                        cb();
                     }).catch(function(err) {
                         console.log(err);
-                        cb();
                     });
-                }, function(err) {
-
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(answer);
-                        console.log("log", answer);
-                    }
-
-                });
-
             }
 
 
