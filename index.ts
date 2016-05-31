@@ -24,6 +24,21 @@ let defaults = <Idefaults>{
 
 
 
+function readReg(client, reg: number) {
+
+
+    return new Promise(function(resolve, reject) {
+        client.readInputRegisters(reg, 2).then(function(data) {
+
+
+            resolve(data.buffer.readFloatBE());
+        }).catch(function(err) {
+            reject(err);
+        });
+    });
+
+}
+
 
 
 class SdM {
@@ -139,34 +154,19 @@ class SdM {
             function start() {
 
 
-                function readReg(client, reg: number) {
-
-
-                    return new Promise(function(resolve, reject) {
-                        client.readInputRegisters(reg, 2).then(function(data) {
-
-
-                            resolve(data.buffer.readFloatBE());
-                        }).catch(function(err) {
-                            reject(err);
-                        });
-                    });
-
-                }
-
 
 
                 let answer = {};
 
                 async.eachSeries(regs, function(iterator, cb) {
 
-                        readReg(that.client, iterator.reg).then(function(d) {
-                            answer[iterator.label + iterator.phase] = d;
-                            cb();
-                        }).catch(function(err) {
-                            console.log(err);
-                            cb();
-                        });
+                    readReg(that.client, iterator.reg).then(function(d) {
+                        answer[iterator.label + iterator.phase] = d;
+                        cb();
+                    }).catch(function(err) {
+                        console.log(err);
+                        cb();
+                    });
 
                 }, function(err) {
 
