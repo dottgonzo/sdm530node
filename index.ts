@@ -7,6 +7,7 @@ import * as async from "async";
 import lsusbdev = require("lsusbdev");
 
 
+let client = new ModbusRTU();
 
 interface Idefaults {
     baud?: number;
@@ -21,89 +22,44 @@ let defaults = <Idefaults>{
     address: 1
 };
 
+if (pathExists.sync("./conf.json")) {
+
+    merge(defaults, require("./conf.json"));
+
+    client.setID(defaults.address);
 
 
+    if (defaults.hub) {
+        lsusbdev().then(function(devis) {
 
-
-
-
-
-class SdM {
-
-    conf: Idefaults;
-    constructor(conf?: Idefaults) {
-
-        let that = this;
-        if (conf) {
-
-            merge(defaults, conf);
-
-            if (defaults.hub) {
-                lsusbdev().then(function(devis) {
-
-                    for (let i = 0; i < devis.length; i++) {
-                        if (devis[i].hub === defaults.hub) {
-                            defaults.dev = devis[i].dev;
-                        }
-                    }
-                    that.conf = defaults;
-                }).catch(function() {
-                    throw "NO USB FOR SDM";
-                });
+            for (let i = 0; i < devis.length; i++) {
+                if (devis[i].hub === defaults.hub) {
+                    defaults.dev = devis[i].dev;
+                }
             }
-
-        } else {
-
-            that.conf = defaults;
-
-
-        }
+            client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+        }).catch(function() {
+            throw "NO USB FOR SDM";
+        });
     }
-    data() {
 
-        let that = this;
-
-        let client = new ModbusRTU();
-
-        client.setID(that.conf.address);
-
-
-
-
-
-            console.log(that.conf);
-
-
-            function start() {
-
-
-                console.log("start");
-                client.readInputRegisters(0, 2).then(function(data) {
-                    console.log("regdata", data)
-
-                }).catch(function(err) {
-                    console.log("regerr", err)
-
-                });
-            }
-
-
-
-
-
-
-            client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
-
-
-    }
+} else {
+    client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
 }
 
 
+function readReg(reg: number) {
+    return new Promise(function(resolve, reject) {
+        client.readInputRegisters(reg, 2).then(function(data) {
+            resolve(data.buffer.readFloatBE());
+        }).catch(function(err) {
+            reject(err);
+        });
+    });
 
+}
 
-
-
-let regss = [
+let regs = [
     {
         label: "volt",
         phase: 1,
@@ -137,44 +93,30 @@ let regss = [
     {
         label: "power",
         phase: 1,
-        reg: 12
+        reg: 0
     },
     {
         label: "power",
         phase: 2,
-        reg: 14
+        reg: 0
     },
     {
         label: "power",
         phase: 3,
-        reg: 16
-    },
-    {
-        label: "frequency",
-        phase: 0,
-        reg: 70
-    },
-    {
-        label: "totalPower",
-        phase: 0,
-        reg: 52
-    },
-    {
-        label: "allPower",
-        phase: 0,
-        reg: 74
-    }
-];
-
-let regs = [
-    {
-        label: "volt",
-        phase: 1,
         reg: 0
     }
-];
+]
+
+function start() {
 
 
 
 
-export = SdM
+    readReg(0).then(function(voltage) {
+        console.log(voltage);
+    });
+
+
+
+}
+
