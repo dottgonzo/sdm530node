@@ -61,26 +61,35 @@ class SdM {
 
         let that = this;
 
-        function readReg(client, reg: number) {
-            console.log("reg", reg)
-            return new Promise(function(resolve, reject) {
-                client.readInputRegisters(reg, 2).then(function(data) {
-                    console.log("regdata", data)
-                    resolve(data.buffer.readFloatBE());
-                }).catch(function(err) {
-                    console.log("regerr", err)
-                    reject(err);
-                });
-            });
-
-        }
-
 
         return new Promise(function(resolve, reject) {
 
 
             function start() {
-                console.log("start")
+
+
+
+
+                function readReg(client, reg: number) {
+                    console.log("reg", reg)
+                    return new Promise(function(resolve, reject) {
+                        client.readInputRegisters(reg, 2).then(function(data) {
+                            console.log("regdata", data)
+                            resolve(data.buffer.readFloatBE());
+                        }).catch(function(err) {
+                            console.log("regerr", err)
+                            reject(err);
+                        });
+                    });
+
+                }
+
+
+
+
+
+
+                console.log("start");
                 let answer = {};
 
                 async.each(regs, function(iterator, cb) {
