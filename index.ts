@@ -22,21 +22,7 @@ let defaults = <Idefaults>{
 };
 
 
-        function readReg(client, reg: number) {
-                            console.log("reg")
 
-            return new Promise(function(resolve, reject) {
-                client.readInputRegisters(reg, 2).then(function(data) {
-                                        console.log(data)
-
-                    resolve(data.buffer.readFloatBE());
-                }).catch(function(err) {
-                    console.log(err)
-                    reject(err);
-                });
-            });
-
-        }
 
 
 
@@ -77,68 +63,68 @@ class SdM {
     }
     data() {
 
-let regs = [
-    {
-        label: "volt",
-        phase: 1,
-        reg: 0
-    },
-    {
-        label: "volt",
-        phase: 2,
-        reg: 2
-    },
-    {
-        label: "volt",
-        phase: 3,
-        reg: 4
-    },
-    {
-        label: "current",
-        phase: 1,
-        reg: 6
-    },
-    {
-        label: "current",
-        phase: 2,
-        reg: 8
-    },
-    {
-        label: "current",
-        phase: 3,
-        reg: 10
-    },
-    {
-        label: "power",
-        phase: 1,
-        reg: 12
-    },
-    {
-        label: "power",
-        phase: 2,
-        reg: 14
-    },
-    {
-        label: "power",
-        phase: 3,
-        reg: 16
-    },
-    {
-        label: "frequency",
-        phase: 0,
-        reg: 70
-    },
-    {
-        label: "totalPower",
-        phase: 0,
-        reg: 52
-    },
-    {
-        label: "allPower",
-        phase: 0,
-        reg: 74
-    }
-];
+        let regs = [
+            {
+                label: "volt",
+                phase: 1,
+                reg: 0
+            },
+            {
+                label: "volt",
+                phase: 2,
+                reg: 2
+            },
+            {
+                label: "volt",
+                phase: 3,
+                reg: 4
+            },
+            {
+                label: "current",
+                phase: 1,
+                reg: 6
+            },
+            {
+                label: "current",
+                phase: 2,
+                reg: 8
+            },
+            {
+                label: "current",
+                phase: 3,
+                reg: 10
+            },
+            {
+                label: "power",
+                phase: 1,
+                reg: 12
+            },
+            {
+                label: "power",
+                phase: 2,
+                reg: 14
+            },
+            {
+                label: "power",
+                phase: 3,
+                reg: 16
+            },
+            {
+                label: "frequency",
+                phase: 0,
+                reg: 70
+            },
+            {
+                label: "totalPower",
+                phase: 0,
+                reg: 52
+            },
+            {
+                label: "allPower",
+                phase: 0,
+                reg: 74
+            }
+        ];
 
 
 
@@ -151,6 +137,25 @@ let regs = [
 
 
             function start() {
+
+
+                function readReg(client, reg: number) {
+                    console.log("reg")
+
+                    return new Promise(function(resolve, reject) {
+                        client.readInputRegisters(reg, 2).then(function(data) {
+                            console.log(data)
+
+                            resolve(data.buffer.readFloatBE());
+                        }).catch(function(err) {
+                            console.log(err)
+                            reject(err);
+                        });
+                    });
+
+                }
+
+
                 console.log("start")
 
                 let answer = {};
@@ -180,7 +185,7 @@ let regs = [
             }
 
 
-console.log(that.conf)
+            console.log(that.conf)
             that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
         });
 
