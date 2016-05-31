@@ -100,9 +100,11 @@ class SdM {
 
             });
         }
-        
-        
-       return that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+
+        return new Promise(function(resolve, reject) {
+
+            resolve(that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start));
+        });
 
     }
 }
