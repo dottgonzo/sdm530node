@@ -203,7 +203,12 @@ let regss = [
         label: "volt",
         phase: 1,
         reg: 0
-    }
+    },
+            {
+                label: "volt",
+                phase: 2,
+                reg: 2
+            }
 ];
 
 
