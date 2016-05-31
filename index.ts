@@ -109,12 +109,14 @@ let regs = [
 
 function start() {
 
-
-
-
-    readReg(0).then(function(voltage) {
+setTimeout(function(){
+      readReg(0).then(function(voltage) {
         console.log(voltage);
     });
+
+  
+},1000)
+
 
 
 
