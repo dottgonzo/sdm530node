@@ -71,7 +71,7 @@ class SdM {
 
 
 
-            console.log(defaults);
+            console.log(that.conf);
 
 
             function start() {
