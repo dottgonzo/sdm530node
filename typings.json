@@ -1,0 +1,25 @@
+{
+  "ambientDevDependencies": {
+    "chai": "registry:dt/chai#3.4.0+20160317120654",
+    "chalk": "registry:dt/chalk#0.4.0+20160317120654",
+    "gulp": "registry:dt/gulp#3.8.0+20160316155526",
+    "gulp-concat": "registry:dt/gulp-concat#0.0.0+20160316155526",
+    "gulp-filter": "registry:dt/gulp-filter#3.0.1+20160316155526",
+    "gulp-mocha": "registry:dt/gulp-mocha#0.0.0+20160316155526",
+    "gulp-sourcemaps": "registry:dt/gulp-sourcemaps#0.0.0+20160316155526",
+    "gulp-typescript": "registry:dt/gulp-typescript#0.0.0+20160317120654",
+    "gulp-util": "registry:dt/gulp-util#0.0.0+20160316155526",
+    "minimatch": "registry:dt/minimatch#2.0.8+20160317120654",
+    "mocha": "registry:dt/mocha#2.2.5+20160317120654",
+    "node": "registry:dt/node#6.0.0+20160524002506",
+    "orchestrator": "registry:dt/orchestrator#0.0.0+20160316155526",
+    "q": "registry:dt/q#0.0.0+20160417152954",
+    "through2": "registry:dt/through2#2.0.0+20160317120654",
+    "vinyl": "registry:dt/vinyl#1.1.0+20160316155526"
+  },
+  "ambientDependencies": {
+    "bluebird": "registry:dt/bluebird#2.0.0+20160319051630",
+    "deep-diff": "registry:dt/deep-diff#0.0.0+20160317120654",
+    "path-exists": "registry:dt/path-exists#1.0.0+20160316155526"
+  }
+}
