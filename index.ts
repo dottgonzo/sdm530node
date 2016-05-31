@@ -76,7 +76,7 @@ function readReg(reg: number) {
 
 }
 
-let regs = [
+let regss = [
     {
         label: "volt",
         phase: 1,
@@ -139,19 +139,28 @@ let regs = [
     }
 ];
 
+let regs = [
+    {
+        label: "volt",
+        phase: 1,
+        reg: 0
+    }
+];
+
 function start() {
 
     return new Promise(function(resolve, reject) {
         let answer = {};
 
-        async.each(regs, function(iterator,cb) {
+        async.each(regs, function(iterator, cb) {
             readReg(iterator.reg).then(function(d) {
 
                 answer[iterator.label + iterator.phase] = d;
 
                 console.log(d);
                 cb();
-            }).catch(function(){
+            }).catch(function(err) {
+                console.log(err);
                 cb();
             });
         }, function(err) {
