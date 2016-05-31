@@ -161,7 +161,6 @@ class SdM {
                 let answer = {};
 
                 async.eachSeries(regs, function(iterator, cb) {
-                    setTimeout(function() {
 
                         readReg(that.client, iterator.reg).then(function(d) {
 
@@ -173,7 +172,6 @@ class SdM {
                             console.log(err);
                             cb();
                         });
-                    }, 1000);
 
                 }, function(err) {
 
