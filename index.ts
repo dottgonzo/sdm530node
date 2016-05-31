@@ -2,6 +2,7 @@ let ModbusRTU = require("modbus-serial");
 import * as pathExists from "path-exists";
 import merge = require("json-add");
 import * as Promise from "bluebird";
+import * as async from "async";
 
 import lsusbdev = require("lsusbdev");
 
@@ -58,17 +59,66 @@ function readReg(reg: number) {
 
 }
 
+let regs = [
+    {
+        label: "volt",
+        phase: 1,
+        reg: 0
+    },
+    {
+        label: "volt",
+        phase: 2,
+        reg: 2
+    },
+    {
+        label: "volt",
+        phase: 3,
+        reg: 4
+    },
+    {
+        label: "current",
+        phase: 1,
+        reg: 6
+    },
+    {
+        label: "current",
+        phase: 2,
+        reg: 8
+    },
+    {
+        label: "current",
+        phase: 3,
+        reg: 10
+    },
+    {
+        label: "power",
+        phase: 1,
+        reg: 0
+    },
+    {
+        label: "power",
+        phase: 2,
+        reg: 0
+    },
+    {
+        label: "power",
+        phase: 3,
+        reg: 0
+    }
+]
 
 function start() {
-    setTimeout(function() {
 
 
 
-        readReg(0).then(function(voltage) {
-            console.log(voltage);
-        });
+    async.each(regs, function(iterator) {
 
-    }, 1000);
+    })
+
+    readReg(0).then(function(voltage) {
+        console.log(voltage);
+    });
+
 
 
 }

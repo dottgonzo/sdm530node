@@ -1,5 +1,5 @@
 {
-  "name": "modbus-sdm630",
+  "name": "modbus-sdm630-production",
   "version": "1.0.0",
   "description": "Eastron 630 modbus reader",
   "main": "index.js",
@@ -36,6 +36,7 @@
     "mocha": "^2.5.3"
   },
   "dependencies": {
+    "async": "^2.0.0-rc.5",
     "bluebird": "^3.4.0",
     "json-add": "0.0.10",
     "lsusbdev": "0.0.10",

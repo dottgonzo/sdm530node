@@ -1,3 +1,4 @@
+/// <reference path="main/ambient/async/index.d.ts" />
 /// <reference path="main/ambient/bluebird/index.d.ts" />
 /// <reference path="main/ambient/chai/index.d.ts" />
 /// <reference path="main/ambient/chalk/index.d.ts" />
