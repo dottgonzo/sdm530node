@@ -18,7 +18,8 @@ interface Idefaults {
 let defaults = <Idefaults>{
     baud: 9600,
     dev: "/dev/ttyUSB0",
-    address: 1
+    address: 1,
+    interval: 10000
 };
 
 
@@ -43,6 +44,7 @@ function readReg(client, reg: number) {
 
 class SdM {
     client;
+    latest;
     conf: Idefaults;
     constructor(conf?: Idefaults) {
 
@@ -76,7 +78,12 @@ class SdM {
 
         }
     }
-    data() {
+
+    last() {
+        return this.latest;
+    }
+
+    data(callback) {
 
         let regs = [
             {
@@ -148,43 +155,44 @@ class SdM {
 
 
 
-        return new Promise(function(resolve, reject) {
-
-
-            function start() {
 
 
 
+        function start() {
 
-                let answer = {};
 
-                async.eachSeries(regs, function(iterator, cb) {
 
-                    readReg(that.client, iterator.reg).then(function(d) {
-                        answer[iterator.label + iterator.phase] = d;
-                        cb();
-                    }).catch(function(err) {
-                        console.log(err);
-                        cb();
-                    });
 
-                }, function(err) {
+            let answer = {};
 
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(answer);
+            async.eachSeries(regs, function(iterator, cb) {
 
-                        that.client.close;
-                    }
-
+                readReg(that.client, iterator.reg).then(function(d) {
+                    answer[iterator.label + iterator.phase] = d;
+                    cb();
+                }).catch(function(err) {
+                    console.log(err);
+                    cb();
                 });
 
-            }
+            }, function(err) {
+
+                if (err) {
+                    console.log(err);
+                } else {
+                    if (callback) {
+                        callback(answer);
+                    }
+                    that.latest = answer;
+                }
+
+            });
+
+        }
 
 
-            that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
-        });
+        that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
+
 
     }
 }
