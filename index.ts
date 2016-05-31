@@ -173,7 +173,7 @@ class SdM {
                     if (err) {
                         reject(err);
                     } else {
-                        that.client.close(function(err) {
+                        that.client.close(function() {
                             resolve(answer);
 
                         });
