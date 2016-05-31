@@ -62,10 +62,13 @@ class SdM {
         let that = this;
 
         function readReg(reg: number) {
+            console.log("reg",reg)
             return new Promise(function(resolve, reject) {
                 that.client.readInputRegisters(reg, 2).then(function(data) {
+                    console.log("regdata",data)
                     resolve(data.buffer.readFloatBE());
                 }).catch(function(err) {
+                    console.log("regerr",err)
                     reject(err);
                 });
             });
