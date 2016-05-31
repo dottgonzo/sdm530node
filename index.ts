@@ -27,8 +27,11 @@ let defaults = <Idefaults>{
 
             return new Promise(function(resolve, reject) {
                 client.readInputRegisters(reg, 2).then(function(data) {
+                                        console.log(data)
+
                     resolve(data.buffer.readFloatBE());
                 }).catch(function(err) {
+                    console.log(err)
                     reject(err);
                 });
             });
