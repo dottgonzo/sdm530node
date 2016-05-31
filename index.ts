@@ -31,7 +31,7 @@ class SdM {
         let that = this;
         if (conf) {
 
-            merge(defaults, require("./conf.json"));
+            merge(defaults,conf);
 
             that.client.setID(defaults.address);
 
@@ -109,7 +109,7 @@ console.log("log",answer);
 
 console.log(defaults)
 
-            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+            that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
         });
 
     }
