@@ -23,6 +23,8 @@ let defaults = <Idefaults>{
 
 
         function readReg(client, reg: number) {
+                            console.log("reg")
+
             return new Promise(function(resolve, reject) {
                 client.readInputRegisters(reg, 2).then(function(data) {
                     resolve(data.buffer.readFloatBE());
@@ -146,6 +148,8 @@ let regs = [
 
 
             function start() {
+                console.log("start")
+
                 let answer = {};
 
                 async.each(regs, function(iterator, cb) {
@@ -173,8 +177,8 @@ let regs = [
             }
 
 
-
-            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+console.log(that.conf)
+            that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
         });
 
     }
