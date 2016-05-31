@@ -77,6 +77,7 @@ class SdM {
 
 
             function start() {
+                console.log("start")
                 let answer = {};
 
                 async.each(regs, function(iterator, cb) {
@@ -102,6 +103,8 @@ class SdM {
                 });
 
             }
+
+console.log(defaults)
 
             that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
         });
