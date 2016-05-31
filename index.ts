@@ -2,11 +2,11 @@ let ModbusRTU = require("modbus-serial");
 import * as pathExists from "path-exists";
 import merge = require("json-add");
 import * as Promise from "bluebird";
+import * as async from "async";
 
 import lsusbdev = require("lsusbdev");
 
 
-let client = new ModbusRTU();
 
 interface Idefaults {
     baud?: number;
@@ -21,55 +21,173 @@ let defaults = <Idefaults>{
     address: 1
 };
 
-if (pathExists.sync("./conf.json")) {
 
-    merge(defaults, require("./conf.json"));
+class SdM {
+    client;
+    conf: Idefaults;
+    constructor(conf?: Idefaults) {
 
-    client.setID(defaults.address);
+        this.client = new ModbusRTU();
+        let that = this;
+        if (conf) {
+
+            merge(defaults, require("./conf.json"));
+
+            that.client.setID(defaults.address);
 
 
-    if (defaults.hub) {
-        lsusbdev().then(function(devis) {
+            if (defaults.hub) {
+                lsusbdev().then(function(devis) {
 
-            for (let i = 0; i < devis.length; i++) {
-                if (devis[i].hub === defaults.hub) {
-                    defaults.dev = devis[i].dev;
-                }
+                    for (let i = 0; i < devis.length; i++) {
+                        if (devis[i].hub === defaults.hub) {
+                            defaults.dev = devis[i].dev;
+                        }
+                    }
+                    that.conf = defaults;
+                }).catch(function() {
+                    throw "NO USB FOR SDM";
+                });
             }
-            client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
-        }).catch(function() {
-            throw "NO USB FOR SDM";
-        });
+
+        } else {
+            that.client.setID(defaults.address);
+            that.conf = defaults;
+
+
+        }
     }
+    data() {
 
-} else {
-    client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
-}
+        let that = this;
+
+        function readReg(client, reg: number) {
+            return new Promise(function(resolve, reject) {
+                client.readInputRegisters(reg, 2).then(function(data) {
+                    resolve(data.buffer.readFloatBE());
+                }).catch(function(err) {
+                    reject(err);
+                });
+            });
+
+        }
 
 
-function readReg(reg: number) {
-    return new Promise(function(resolve, reject) {
-        client.readInputRegisters(reg, 2).then(function(data) {
-            resolve(data.buffer.readFloatBE());
-        }).catch(function(err) {
-            reject(err);
+        return new Promise(function(resolve, reject) {
+
+
+            function start() {
+                let answer = {};
+
+                async.each(regs, function(iterator, cb) {
+                    readReg(that.client, iterator.reg).then(function(d) {
+
+                        answer[iterator.label + iterator.phase] = d;
+
+                        console.log(d);
+                        cb();
+                    }).catch(function(err) {
+                        console.log(err);
+                        cb();
+                    });
+                }, function(err) {
+
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(answer);
+
+                    }
+
+                });
+
+            }
+
+
+
+            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
         });
-    });
 
+    }
 }
 
 
-function start() {
-    setTimeout(function() {
 
 
 
-        readReg(0).then(function(voltage) {
-            console.log(voltage);
-        });
 
-    }, 1000);
+let regss = [
+    {
+        label: "volt",
+        phase: 1,
+        reg: 0
+    },
+    {
+        label: "volt",
+        phase: 2,
+        reg: 2
+    },
+    {
+        label: "volt",
+        phase: 3,
+        reg: 4
+    },
+    {
+        label: "current",
+        phase: 1,
+        reg: 6
+    },
+    {
+        label: "current",
+        phase: 2,
+        reg: 8
+    },
+    {
+        label: "current",
+        phase: 3,
+        reg: 10
+    },
+    {
+        label: "power",
+        phase: 1,
+        reg: 12
+    },
+    {
+        label: "power",
+        phase: 2,
+        reg: 14
+    },
+    {
+        label: "power",
+        phase: 3,
+        reg: 16
+    },
+    {
+        label: "frequency",
+        phase: 0,
+        reg: 70
+    },
+    {
+        label: "totalPower",
+        phase: 0,
+        reg: 52
+    },
+    {
+        label: "allPower",
+        phase: 0,
+        reg: 74
+    }
+];
+
+let regs = [
+    {
+        label: "volt",
+        phase: 1,
+        reg: 0
+    }
+];
 
 
-}
 
+
+export = SdM
