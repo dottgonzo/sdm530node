@@ -5,7 +5,7 @@ setTimeout(function() {
 
     SDM.data(function(d) {
         console.log(d)
-    })
+    },2000)
 
 }, 1000);
 

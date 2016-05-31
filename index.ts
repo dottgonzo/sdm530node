@@ -83,7 +83,7 @@ class SdM {
         return this.latest;
     }
 
-    data(callback) {
+    data(callback?: Function, interval?: number) {
 
         let regs = [
             {
@@ -190,8 +190,15 @@ class SdM {
 
         }
 
+        if (interval) {
+            setInterval(function() {
+                that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
 
-        that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
+            }, interval);
+        } else {
+            that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
+
+        }
 
 
     }
