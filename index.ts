@@ -161,16 +161,20 @@ class SdM {
                 let answer = {};
 
                 async.each(regss, function(iterator, cb) {
-                    readReg(that.client, iterator.reg).then(function(d) {
+                    setTimeout(function() {
 
-                        answer[iterator.label + iterator.phase] = d;
+                        readReg(that.client, iterator.reg).then(function(d) {
 
-                        console.log(d);
-                        cb();
-                    }).catch(function(err) {
-                        console.log(err);
-                        cb();
-                    });
+                            answer[iterator.label + iterator.phase] = d;
+
+                            console.log(d);
+                            cb();
+                        }).catch(function(err) {
+                            console.log(err);
+                            cb();
+                        });
+                    }, 1000);
+
                 }, function(err) {
 
                     if (err) {
@@ -204,11 +208,11 @@ let regss = [
         phase: 1,
         reg: 0
     },
-            {
-                label: "volt",
-                phase: 2,
-                reg: 2
-            }
+    {
+        label: "volt",
+        phase: 2,
+        reg: 2
+    }
 ];
 
 
