@@ -61,9 +61,9 @@ class SdM {
 
         let that = this;
 
-        function readReg(client, reg: number) {
+        function readReg(reg: number) {
             return new Promise(function(resolve, reject) {
-                client.readInputRegisters(reg, 2).then(function(data) {
+                that.client.readInputRegisters(reg, 2).then(function(data) {
                     resolve(data.buffer.readFloatBE());
                 }).catch(function(err) {
                     reject(err);
@@ -76,11 +76,11 @@ class SdM {
         return new Promise(function(resolve, reject) {
 
 
-            function start(resolve, reject) {
+            function start() {
                 let answer = {};
 
                 async.each(regs, function(iterator, cb) {
-                    readReg(that.client, iterator.reg).then(function(d) {
+                    readReg(iterator.reg).then(function(d) {
 
                         answer[iterator.label + iterator.phase] = d;
 
@@ -103,9 +103,7 @@ class SdM {
 
             }
 
-
-
-            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start(resolve, reject));
+            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
         });
 
     }
