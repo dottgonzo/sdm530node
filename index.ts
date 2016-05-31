@@ -22,6 +22,19 @@ let defaults = <Idefaults>{
 };
 
 
+        function readReg(client, reg: number) {
+            return new Promise(function(resolve, reject) {
+                client.readInputRegisters(reg, 2).then(function(data) {
+                    resolve(data.buffer.readFloatBE());
+                }).catch(function(err) {
+                    reject(err);
+                });
+            });
+
+        }
+
+
+
 class SdM {
     client;
     conf: Idefaults;
@@ -59,64 +72,7 @@ class SdM {
     }
     data() {
 
-        let that = this;
-
-        function readReg(client, reg: number) {
-            return new Promise(function(resolve, reject) {
-                client.readInputRegisters(reg, 2).then(function(data) {
-                    resolve(data.buffer.readFloatBE());
-                }).catch(function(err) {
-                    reject(err);
-                });
-            });
-
-        }
-
-
-        return new Promise(function(resolve, reject) {
-
-
-            function start() {
-                let answer = {};
-
-                async.each(regs, function(iterator, cb) {
-                    readReg(that.client, iterator.reg).then(function(d) {
-
-                        answer[iterator.label + iterator.phase] = d;
-
-                        console.log(d);
-                        cb();
-                    }).catch(function(err) {
-                        console.log(err);
-                        cb();
-                    });
-                }, function(err) {
-
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(answer);
-
-                    }
-
-                });
-
-            }
-
-
-
-            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
-        });
-
-    }
-}
-
-
-
-
-
-
-let regss = [
+let regs = [
     {
         label: "volt",
         phase: 1,
@@ -179,7 +135,58 @@ let regss = [
     }
 ];
 
-let regs = [
+
+
+
+        let that = this;
+
+
+
+        return new Promise(function(resolve, reject) {
+
+
+            function start() {
+                let answer = {};
+
+                async.each(regs, function(iterator, cb) {
+                    readReg(that.client, iterator.reg).then(function(d) {
+
+                        answer[iterator.label + iterator.phase] = d;
+
+                        console.log(d);
+                        cb();
+                    }).catch(function(err) {
+                        console.log(err);
+                        cb();
+                    });
+                }, function(err) {
+
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(answer);
+
+                    }
+
+                });
+
+            }
+
+
+
+            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+        });
+
+    }
+}
+
+
+
+
+
+
+
+let regss = [
     {
         label: "volt",
         phase: 1,
