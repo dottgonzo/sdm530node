@@ -76,7 +76,7 @@ class SdM {
         return new Promise(function(resolve, reject) {
 
 
-            function start() {
+            function start(resolve, reject) {
                 let answer = {};
 
                 async.each(regs, function(iterator, cb) {
@@ -105,7 +105,7 @@ class SdM {
 
 
 
-            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start(resolve, reject));
         });
 
     }
