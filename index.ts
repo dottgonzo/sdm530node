@@ -67,7 +67,7 @@ class SdM {
 
         client.setID(that.conf.address);
 
-        return new Promise(function(resolve, reject) {
+
 
 
 
@@ -80,10 +80,10 @@ class SdM {
                 console.log("start");
                 client.readInputRegisters(0, 2).then(function(data) {
                     console.log("regdata", data)
-                    resolve(data.buffer.readFloatBE());
+
                 }).catch(function(err) {
                     console.log("regerr", err)
-                    reject(err);
+
                 });
             }
 
@@ -93,7 +93,7 @@ class SdM {
 
 
             client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
-        });
+
 
     }
 }
