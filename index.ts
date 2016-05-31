@@ -160,7 +160,7 @@ class SdM {
 
                 let answer = {};
 
-                async.eachSeries(regss, function(iterator, cb) {
+                async.eachSeries(regs, function(iterator, cb) {
                     setTimeout(function() {
 
                         readReg(that.client, iterator.reg).then(function(d) {
