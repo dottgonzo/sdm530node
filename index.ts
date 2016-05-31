@@ -25,6 +25,9 @@ if (pathExists.sync("./conf.json")) {
 
     merge(defaults, require("./conf.json"));
 
+    client.setID(defaults.address);
+
+
     if (defaults.hub) {
         lsusbdev().then(function(devis) {
 
@@ -33,14 +36,14 @@ if (pathExists.sync("./conf.json")) {
                     defaults.dev = devis[i].dev;
                 }
             }
-            start();
+            client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
         }).catch(function() {
             throw "NO USB FOR SDM";
         });
     }
 
 } else {
-    start();
+    client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
 }
 
 
@@ -59,8 +62,6 @@ function readReg(reg: number) {
 function start() {
     setTimeout(function() {
 
-        client.connectRTU(defaults.dev, { baudrate: defaults.baud });
-        client.setID(defaults.address);
 
 
         readReg(0).then(function(voltage) {
