@@ -1,6 +1,8 @@
 import sdm = require("../index");
 
-sdm().then(function(data) {
+let SDM = new sdm();
+
+SDM.data().then(function(data) {
     console.log(data);
 }).catch(function(err) {
     console.log(err);

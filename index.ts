@@ -7,7 +7,6 @@ import * as async from "async";
 import lsusbdev = require("lsusbdev");
 
 
-let client = new ModbusRTU();
 
 interface Idefaults {
     baud?: number;
@@ -23,14 +22,18 @@ let defaults = <Idefaults>{
 };
 
 
-function data() {
+class SdM {
+    client;
+    conf: Idefaults;
+    constructor(conf?: Idefaults) {
 
-
-        if (pathExists.sync("./conf.json")) {
+        this.client = new ModbusRTU();
+        let that = this;
+        if (conf) {
 
             merge(defaults, require("./conf.json"));
 
-            client.setID(defaults.address);
+            that.client.setID(defaults.address);
 
 
             if (defaults.hub) {
@@ -41,29 +44,73 @@ function data() {
                             defaults.dev = devis[i].dev;
                         }
                     }
-                    return client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+                    that.conf = defaults;
                 }).catch(function() {
                     throw "NO USB FOR SDM";
                 });
             }
 
         } else {
-                    return client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+            that.client.setID(defaults.address);
+            that.conf = defaults;
+
+
+        }
+    }
+    data() {
+
+        let that = this;
+
+        function readReg(client, reg: number) {
+            return new Promise(function(resolve, reject) {
+                client.readInputRegisters(reg, 2).then(function(data) {
+                    resolve(data.buffer.readFloatBE());
+                }).catch(function(err) {
+                    reject(err);
+                });
+            });
 
         }
 
+        function start() {
+            return new Promise(function(resolve, reject) {
+                let answer = {};
+
+                async.each(regs, function(iterator, cb) {
+                    readReg(that.client, iterator.reg).then(function(d) {
+
+                        answer[iterator.label + iterator.phase] = d;
+
+                        console.log(d);
+                        cb();
+                    }).catch(function(err) {
+                        console.log(err);
+                        cb();
+                    });
+                }, function(err) {
+
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(answer);
+
+                    }
+
+                });
+
+            });
+        }
+        
+        
+       return that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+
+    }
 }
 
-function readReg(reg: number) {
-    return new Promise(function(resolve, reject) {
-        client.readInputRegisters(reg, 2).then(function(data) {
-            resolve(data.buffer.readFloatBE());
-        }).catch(function(err) {
-            reject(err);
-        });
-    });
 
-}
+
+
+
 
 let regss = [
     {
@@ -136,38 +183,7 @@ let regs = [
     }
 ];
 
-function start() {
-
-    return new Promise(function(resolve, reject) {
-        let answer = {};
-
-        async.each(regs, function(iterator, cb) {
-            readReg(iterator.reg).then(function(d) {
-
-                answer[iterator.label + iterator.phase] = d;
-
-                console.log(d);
-                cb();
-            }).catch(function(err) {
-                console.log(err);
-                cb();
-            });
-        }, function(err) {
-
-            if (err) {
-                reject(err);
-            } else {
-                resolve(answer);
-
-            }
-
-        });
 
 
 
-
-    });
-}
-
-
-export = data
+export = SdM
