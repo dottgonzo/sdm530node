@@ -72,8 +72,11 @@ class SdM {
 
         }
 
-        function start() {
-            return new Promise(function(resolve, reject) {
+
+        return new Promise(function(resolve, reject) {
+
+
+            function start() {
                 let answer = {};
 
                 async.each(regs, function(iterator, cb) {
@@ -98,12 +101,11 @@ class SdM {
 
                 });
 
-            });
-        }
+            }
 
-        return new Promise(function(resolve, reject) {
 
-            resolve(that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start));
+
+            that.client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
         });
 
     }
