@@ -140,15 +140,14 @@ class SdM {
 
 
                 function readReg(client, reg: number) {
-                    console.log("reg")
+
 
                     return new Promise(function(resolve, reject) {
                         client.readInputRegisters(reg, 2).then(function(data) {
-                            console.log(data)
+
 
                             resolve(data.buffer.readFloatBE());
                         }).catch(function(err) {
-                            console.log(err)
                             reject(err);
                         });
                     });
@@ -156,7 +155,6 @@ class SdM {
                 }
 
 
-                console.log("start")
 
                 let answer = {};
 
@@ -187,7 +185,6 @@ class SdM {
             }
 
 
-            console.log(that.conf)
             that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
         });
 
