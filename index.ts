@@ -22,31 +22,48 @@ let defaults = <Idefaults>{
     address: 1
 };
 
-if (pathExists.sync("./conf.json")) {
 
-    merge(defaults, require("./conf.json"));
+function data() {
 
-    client.setID(defaults.address);
+    return new Promise(function(resolve, reject) {
+
+        if (pathExists.sync("./conf.json")) {
+
+            merge(defaults, require("./conf.json"));
+
+            client.setID(defaults.address);
 
 
-    if (defaults.hub) {
-        lsusbdev().then(function(devis) {
+            if (defaults.hub) {
+                lsusbdev().then(function(devis) {
 
-            for (let i = 0; i < devis.length; i++) {
-                if (devis[i].hub === defaults.hub) {
-                    defaults.dev = devis[i].dev;
-                }
+                    for (let i = 0; i < devis.length; i++) {
+                        if (devis[i].hub === defaults.hub) {
+                            defaults.dev = devis[i].dev;
+                        }
+                    }
+                    client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start().then(function(data) {
+                        resolve(data);
+                    }).catch(function(err) {
+                        reject(err);
+
+                    }));
+                }).catch(function() {
+                    throw "NO USB FOR SDM";
+                });
             }
-            client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
-        }).catch(function() {
-            throw "NO USB FOR SDM";
-        });
-    }
 
-} else {
-    client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start);
+        } else {
+            client.connectRTU(defaults.dev, { baudrate: defaults.baud }, start().then(function(data) {
+                resolve(data);
+            }).catch(function(err) {
+                reject(err);
+
+            }));
+        }
+
+    });
 }
-
 
 function readReg(reg: number) {
     return new Promise(function(resolve, reject) {
@@ -93,34 +110,63 @@ let regs = [
     {
         label: "power",
         phase: 1,
-        reg: 0
+        reg: 12
     },
     {
         label: "power",
         phase: 2,
-        reg: 0
+        reg: 14
     },
     {
         label: "power",
         phase: 3,
-        reg: 0
+        reg: 16
+    },
+    {
+        label: "frequency",
+        phase: 0,
+        reg: 70
+    },
+    {
+        label: "totalPower",
+        phase: 0,
+        reg: 52
+    },
+    {
+        label: "allPower",
+        phase: 0,
+        reg: 74
     }
 ]
 
 function start() {
 
+    return new Promise(function(resolve, reject) {
+        let answer = {};
+
+        async.each(regs, function(iterator) {
+            readReg(iterator.reg).then(function(d) {
+
+                answer[iterator.label + iterator.phase] = d;
+
+                console.log(d);
+            });
+        }, function(err) {
+
+            if (err) {
+                reject(err);
+            } else {
+                resolve(answer);
+
+            }
+
+        });
 
 
-    async.each(regs, function(iterator) {
 
-    })
 
-    readReg(0).then(function(voltage) {
-        console.log(voltage);
     });
-
-
-
 }
 
 
+export = data
