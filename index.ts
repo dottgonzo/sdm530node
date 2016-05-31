@@ -31,7 +31,7 @@ class SdM {
         let that = this;
         if (conf) {
 
-            merge(defaults,conf);
+            merge(defaults, conf);
 
             that.client.setID(defaults.address);
 
@@ -61,14 +61,14 @@ class SdM {
 
         let that = this;
 
-        function readReg(reg: number) {
-            console.log("reg",reg)
+        function readReg(client, reg: number) {
+            console.log("reg", reg)
             return new Promise(function(resolve, reject) {
-                that.client.readInputRegisters(reg, 2).then(function(data) {
-                    console.log("regdata",data)
+                client.readInputRegisters(reg, 2).then(function(data) {
+                    console.log("regdata", data)
                     resolve(data.buffer.readFloatBE());
                 }).catch(function(err) {
-                    console.log("regerr",err)
+                    console.log("regerr", err)
                     reject(err);
                 });
             });
@@ -84,7 +84,7 @@ class SdM {
                 let answer = {};
 
                 async.each(regs, function(iterator, cb) {
-                    readReg(iterator.reg).then(function(d) {
+                    readReg(that.client, iterator.reg).then(function(d) {
 
                         answer[iterator.label + iterator.phase] = d;
 
@@ -100,14 +100,14 @@ class SdM {
                         reject(err);
                     } else {
                         resolve(answer);
-console.log("log",answer);
+                        console.log("log", answer);
                     }
 
                 });
 
             }
 
-console.log(defaults)
+            console.log(defaults)
 
             that.client.connectRTU(that.conf.dev, { baudrate: that.conf.baud }, start);
         });
