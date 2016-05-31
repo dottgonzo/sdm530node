@@ -160,7 +160,7 @@ class SdM {
 
                 let answer = {};
 
-                async.each(regs, function(iterator, cb) {
+                async.each(regss, function(iterator, cb) {
                     readReg(that.client, iterator.reg).then(function(d) {
 
                         answer[iterator.label + iterator.phase] = d;
