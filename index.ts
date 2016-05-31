@@ -25,6 +25,7 @@ let defaults = <Idefaults>{
 function readReg(client, reg: number) {
     console.log("reg", reg)
     return new Promise(function(resolve, reject) {
+        console.log("prom")
         client.readInputRegisters(reg, 2).then(function(data) {
             console.log("regdata", data)
             resolve(data.buffer.readFloatBE());
@@ -49,9 +50,6 @@ class SdM {
         if (conf) {
 
             merge(defaults, conf);
-
-            that.client.setID(defaults.address);
-
 
             if (defaults.hub) {
                 lsusbdev().then(function(devis) {
