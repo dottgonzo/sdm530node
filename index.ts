@@ -153,19 +153,25 @@ class SdM {
                 group: "grid"
             },
             {
+                label: "voltage",
+                phase: 0,
+                reg: 42,
+                group: "grid"
+            },
+            {
+                label: "current",
+                phase: 0,
+                reg: 46,
+                group: "grid"
+            },
+            {
                 label: "peakMax",
                 phase: 0,
                 reg: 86,
                 group: "main"
             },
             {
-                label: "ExpAllPower",
-                phase: 0,
-                reg: 74,
-                group: "main"
-            },
-            {
-                label: "ImpAllPower",
+                label: "totalEnergy",
                 phase: 0,
                 reg: 72,
                 group: "main"
