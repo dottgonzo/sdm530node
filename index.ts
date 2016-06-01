@@ -347,7 +347,7 @@ class SdM {
 
                 if (err) {
                     console.log(err);
-                } else if (answer.grid.power && answer.grid.power > 0 && that.validDate) {
+                } else if (answer.grid.power && that.validDate) {
                     if (callback) {
                         callback(answer);
                     }
