@@ -347,18 +347,20 @@ class SdM {
 
                 if (err) {
                     console.log(err);
-                } else if (answer.grid.power && that.validDate) {
-                    if (callback) {
-                        callback(answer);
-                    }
+                    delete answer._id;
+                } else if (that.validDate) {
+
                     that.latest = answer;
                 } else {
+                    delete answer._id;
 
                     console.log(answer);
 
                     console.log("malformed data");
                 }
-
+                if (callback) {
+                    callback(answer);
+                }
             });
 
         }
