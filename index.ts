@@ -33,6 +33,7 @@ interface Ireg {
 
 function readReg(client, reg: number) {
 
+console.log("reg");
 
     return new Promise(function(resolve, reject) {
         client.readInputRegisters(reg, 2).then(function(data) {
