@@ -337,7 +337,7 @@ class SdM {
 
             configs.push({ regs: regs, settings: that.conf[i] });
             answers.push({
-                apiVersion: require("package.json").version,
+                apiVersion: require("./package.json").version,
                 address: that.conf[i].address,
                 model: "sdm630",
                 active: true,
