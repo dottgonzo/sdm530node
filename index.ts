@@ -356,7 +356,10 @@ class SdM {
                     cb();
                 }).catch(function(err) {
                     cb(err);
-                }));
+                }),function(err){
+                    console.log("cberr");
+                    console.log(err);
+                });
 
 
             }, function(err) {
