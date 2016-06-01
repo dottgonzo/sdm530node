@@ -87,7 +87,7 @@ console.log(config)
             if (err) {
                 reject(err);
             } else if (answer.grid.power && answer.grid.power > 0) {
-
+console.log(answer)
                 resolve(answer);
             }
 
