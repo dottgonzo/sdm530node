@@ -52,8 +52,8 @@ function start(config, client) {
 
     return new Promise(function(resolve, reject) {
         let answer = <any>{
-            grid:{},
-            strings:[]
+            grid: {},
+            strings: []
         };
         async.eachSeries(config.regs, function(iterator: any, cb) {
 
@@ -68,7 +68,7 @@ function start(config, client) {
                     answer.strings[iterator.phase - 1][iterator.label] = d;
 
                 } else if (iterator.group === "grid") {
- 
+
                     answer.grid[iterator.label] = d;
                 } else if (iterator.group === "main") {
                     answer[iterator.label] = d;
@@ -86,7 +86,7 @@ function start(config, client) {
 
             if (err) {
                 reject(err);
-            } else if (answer.grid && answer.grid.power && answer.grid.power > 0) {
+            } else if (answer.grid.power && answer.grid.power > 0) {
 
                 resolve(answer);
             }
