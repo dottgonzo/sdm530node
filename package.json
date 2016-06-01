@@ -1,6 +1,6 @@
 {
   "name": "modbus-sdm630-production",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Eastron 630 modbus reader",
   "main": "index.js",
   "scripts": {
@@ -41,6 +41,7 @@
     "json-add": "0.0.10",
     "lsusbdev": "0.0.10",
     "modbus-serial": "^4.1.0",
+    "moment-timezone": "^0.5.4",
     "path-exists": "^3.0.0",
     "request-promise-json": "^1.0.4",
     "serialport": "^3.1.2"

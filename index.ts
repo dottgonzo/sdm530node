@@ -1,4 +1,7 @@
 let ModbusRTU = require("modbus-serial");
+
+let moment = require("moment-timezone");
+
 import * as pathExists from "path-exists";
 import merge = require("json-add");
 import * as Promise from "bluebird";
@@ -15,6 +18,7 @@ interface Iconf {
     hub?: string;
     type?: string;
     uid: string;
+    tz: string;
 }
 
 interface Idefaults {
@@ -24,13 +28,15 @@ interface Idefaults {
     type: string;
     uid: string;
     hub?: string;
+    tz: string;
 }
 
 let defaults = <Idefaults>{
     baud: 9600,
     dev: "/dev/ttyUSB0",
     address: 1,
-    type: "import"
+    type: "import",
+    tz: "GMT"
 };
 
 interface Ireg {
@@ -309,8 +315,9 @@ class SdM {
                 uid: that.conf.uid,
                 grid: {},
                 strings: [],
-                updatedAt: new Date().getTime(),
-                date: new Date().getTime()
+                updatedAt: parseInt(moment.tz("GMT").format("x")),
+                date: parseInt(moment.tz(that.conf.tz).format("x")),
+                _id: "data_" + that.conf.uid + "_" + parseInt(moment.tz(that.conf.tz).format("x"))
             };
 
             async.eachSeries(regs, function(iterator, cb) {
@@ -390,7 +397,7 @@ class SdM {
             });
         }
 
-checkRemote();
+        checkRemote();
     }
 }
 
