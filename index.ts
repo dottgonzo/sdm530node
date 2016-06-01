@@ -161,11 +161,13 @@ class SdM {
 
 
 
+
+
+
+
+
+
         let that = this;
-
-
-
-
 
 
         function start() {
@@ -173,12 +175,29 @@ class SdM {
 
 
 
-            let answer = {};
+            let answer = <any>{};
 
             async.eachSeries(regs, function(iterator, cb) {
 
                 readReg(that.client, iterator.reg).then(function(d) {
+
+                    if (iterator.phase) {
+                        if (!answer.strings) {
+                            answer.strings = [];
+                        }
+                        answer.strings[iterator.phase - 1][iterator.label] = d;
+
+                    } else {
+                        if (!answer.grid) {
+                            answer.grid = {};
+                        }
+                        answer.grid[iterator.label] = d;
+
+                    }
+
                     answer[iterator.label + iterator.phase] = d;
+
+
                     cb();
                 }).catch(function(err) {
                     console.log(err);
