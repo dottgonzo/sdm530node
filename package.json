@@ -1,6 +1,6 @@
 {
   "name": "modbus-sdm630-production",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Eastron 630 modbus reader",
   "main": "index.js",
   "scripts": {

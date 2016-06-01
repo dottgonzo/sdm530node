@@ -308,11 +308,9 @@ class SdM {
 
         function start() {
 
-
-
-
             let answer = <any>{
                 uid: that.conf.uid,
+                active: true,
                 grid: {},
                 strings: [],
                 updatedAt: parseInt(moment.tz("GMT").format("x")),
