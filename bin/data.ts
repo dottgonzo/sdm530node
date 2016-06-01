@@ -1,13 +1,13 @@
 import sdm = require("../index");
 
-let SDM = new sdm();
+let SDM = new sdm({ uid: "test" });
 setTimeout(function() {
 
     SDM.data(function(d) {
         console.log(d);
     }, 2000);
 
-}, 1000);
+}, 5000);
 
 
 
