@@ -33,7 +33,7 @@ interface Ireg {
 
 function readReg(client, reg: number) {
 
-console.log("reg");
+    console.log("reg");
 
     return new Promise(function(resolve, reject) {
         client.readInputRegisters(reg, 2).then(function(data) {
@@ -50,7 +50,7 @@ console.log("reg");
 
 
 function start(config, client) {
-console.log(config)
+    console.log(config);
     return new Promise(function(resolve, reject) {
         let answer = <any>{
             grid: {},
@@ -88,7 +88,7 @@ console.log(config)
             if (err) {
                 reject(err);
             } else if (answer.grid.power && answer.grid.power > 0) {
-console.log(answer)
+                console.log(answer);
                 resolve(answer);
             }
 
