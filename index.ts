@@ -13,16 +13,22 @@ interface Idefaults {
     dev?: string;
     address?: number;
     hub?: string;
+    type?: string;
 }
 
 let defaults = <Idefaults>{
     baud: 9600,
     dev: "/dev/ttyUSB0",
     address: 1,
-    interval: 10000
+    type: "import"
 };
 
-
+interface Ireg {
+    label: string;
+    phase: number;
+    reg: number;
+    group: string;
+}
 
 
 function readReg(client, reg: number) {
@@ -85,103 +91,195 @@ class SdM {
 
     data(callback?: Function, interval?: number) {
 
-        let regs = [
-            {
-                label: "voltage",
-                phase: 1,
-                reg: 0,
-                group: "strings"
-            },
-            {
-                label: "voltage",
-                phase: 2,
-                reg: 2,
-                group: "strings"
-            },
-            {
-                label: "voltage",
-                phase: 3,
-                reg: 4,
-                group: "strings"
-            },
-            {
-                label: "current",
-                phase: 1,
-                reg: 6,
-                group: "strings"
-            },
-            {
-                label: "current",
-                phase: 2,
-                reg: 8,
-                group: "strings"
-            },
-            {
-                label: "current",
-                phase: 3,
-                reg: 10,
-                group: "strings"
-            },
-            {
-                label: "power",
-                phase: 1,
-                reg: 12,
-                group: "strings"
-            },
-            {
-                label: "power",
-                phase: 2,
-                reg: 14,
-                group: "strings"
-            },
-            {
-                label: "power",
-                phase: 3,
-                reg: 16,
-                group: "strings"
-            },
-            {
-                label: "hz",
-                phase: 0,
-                reg: 70,
-                group: "grid"
-            },
-            {
-                label: "power",
-                phase: 0,
-                reg: 52,
-                group: "grid"
-            },
-            {
-                label: "voltage",
-                phase: 0,
-                reg: 42,
-                group: "grid"
-            },
-            {
-                label: "current",
-                phase: 0,
-                reg: 46,
-                group: "grid"
-            },
-            {
-                label: "peakMax",
-                phase: 0,
-                reg: 86,
-                group: "main"
-            },
-            {
-                label: "totalEnergy",
-                phase: 0,
-                reg: 72,
-                group: "main"
-            }
-        ];
+        let regs: Ireg[];
 
-
-
-
-
+        if (this.conf.type === "import") {
+            regs = [
+                {
+                    label: "voltage",
+                    phase: 1,
+                    reg: 0,
+                    group: "strings"
+                },
+                {
+                    label: "voltage",
+                    phase: 2,
+                    reg: 2,
+                    group: "strings"
+                },
+                {
+                    label: "voltage",
+                    phase: 3,
+                    reg: 4,
+                    group: "strings"
+                },
+                {
+                    label: "current",
+                    phase: 1,
+                    reg: 6,
+                    group: "strings"
+                },
+                {
+                    label: "current",
+                    phase: 2,
+                    reg: 8,
+                    group: "strings"
+                },
+                {
+                    label: "current",
+                    phase: 3,
+                    reg: 10,
+                    group: "strings"
+                },
+                {
+                    label: "power",
+                    phase: 1,
+                    reg: 12,
+                    group: "strings"
+                },
+                {
+                    label: "power",
+                    phase: 2,
+                    reg: 14,
+                    group: "strings"
+                },
+                {
+                    label: "power",
+                    phase: 3,
+                    reg: 16,
+                    group: "strings"
+                },
+                {
+                    label: "hz",
+                    phase: 0,
+                    reg: 70,
+                    group: "grid"
+                },
+                {
+                    label: "power",
+                    phase: 0,
+                    reg: 52,
+                    group: "grid"
+                },
+                {
+                    label: "voltage",
+                    phase: 0,
+                    reg: 42,
+                    group: "grid"
+                },
+                {
+                    label: "current",
+                    phase: 0,
+                    reg: 46,
+                    group: "grid"
+                },
+                {
+                    label: "peakMax",
+                    phase: 0,
+                    reg: 86,
+                    group: "main"
+                },
+                {
+                    label: "totalEnergy",
+                    phase: 0,
+                    reg: 72,
+                    group: "main"
+                }
+            ];
+        } else if (this.conf.type === "export") {
+            regs = [
+                {
+                    label: "voltage",
+                    phase: 1,
+                    reg: 0,
+                    group: "strings"
+                },
+                {
+                    label: "voltage",
+                    phase: 2,
+                    reg: 2,
+                    group: "strings"
+                },
+                {
+                    label: "voltage",
+                    phase: 3,
+                    reg: 4,
+                    group: "strings"
+                },
+                {
+                    label: "current",
+                    phase: 1,
+                    reg: 6,
+                    group: "strings"
+                },
+                {
+                    label: "current",
+                    phase: 2,
+                    reg: 8,
+                    group: "strings"
+                },
+                {
+                    label: "current",
+                    phase: 3,
+                    reg: 10,
+                    group: "strings"
+                },
+                {
+                    label: "power",
+                    phase: 1,
+                    reg: 12,
+                    group: "strings"
+                },
+                {
+                    label: "power",
+                    phase: 2,
+                    reg: 14,
+                    group: "strings"
+                },
+                {
+                    label: "power",
+                    phase: 3,
+                    reg: 16,
+                    group: "strings"
+                },
+                {
+                    label: "hz",
+                    phase: 0,
+                    reg: 70,
+                    group: "grid"
+                },
+                {
+                    label: "power",
+                    phase: 0,
+                    reg: 52,
+                    group: "grid"
+                },
+                {
+                    label: "voltage",
+                    phase: 0,
+                    reg: 42,
+                    group: "grid"
+                },
+                {
+                    label: "current",
+                    phase: 0,
+                    reg: 46,
+                    group: "grid"
+                },
+                {
+                    label: "peakMax",
+                    phase: 0,
+                    reg: 86,
+                    group: "main"
+                },
+                {
+                    label: "totalEnergy",
+                    phase: 0,
+                    reg: 74,
+                    group: "main"
+                }
+            ];
+        }
 
 
 
