@@ -51,25 +51,24 @@ function readReg(client, reg: number) {
 function start(config, client) {
 
     return new Promise(function(resolve, reject) {
-        let answer = <any>{};
+        let answer = <any>{
+            grid:{},
+            strings:[]
+        };
         async.eachSeries(config.regs, function(iterator: any, cb) {
 
             readReg(client, iterator.reg).then(function(d) {
 
                 if (iterator.group === "strings") {
 
-                    if (!answer.strings) {
-                        answer.strings = [];
-                    }
+
                     if (!answer.strings[iterator.phase - 1]) {
                         answer.strings[iterator.phase - 1] = {};
                     }
                     answer.strings[iterator.phase - 1][iterator.label] = d;
 
                 } else if (iterator.group === "grid") {
-                    if (!answer.grid) {
-                        answer.grid = {};
-                    }
+ 
                     answer.grid[iterator.label] = d;
                 } else if (iterator.group === "main") {
                     answer[iterator.label] = d;
@@ -87,7 +86,7 @@ function start(config, client) {
 
             if (err) {
                 reject(err);
-            } else if (answer.grid.power && answer.grid.power > 0) {
+            } else if (answer.grid && answer.grid.power && answer.grid.power > 0) {
 
                 resolve(answer);
             }
