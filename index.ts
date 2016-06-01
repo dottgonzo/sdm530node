@@ -57,7 +57,6 @@ function readReg(client, reg: number) {
 }
 
 
-
 class SdM {
     client;
     latest;
