@@ -314,7 +314,7 @@ class SdM {
                 grid: {},
                 strings: [],
                 updatedAt: parseInt(moment.tz("GMT").format("x")),
-                date: parseInt(moment.tz(that.conf.tz).format("x")),
+                date: moment.tz(that.conf.tz).format("YYYYMMDD-HH:mm:ss"),
                 _id: "data_" + that.conf.uid + "_" + parseInt(moment.tz(that.conf.tz).format("x"))
             };
 
