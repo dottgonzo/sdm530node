@@ -350,7 +350,7 @@ class SdM {
             async.eachSeries(configs, function(iterator, cb) {
 
                 that.client.setID(iterator.settings.address);
-                that.client.connectRTU(iterator.settings.dev, { baudrate: iterator.settings.baud }, start(iterator.settings, that.client).then(function(data) {
+                that.client.connectRTU(iterator.settings.dev, { baudrate: iterator.settings.baud }, start(iterator, that.client).then(function(data) {
                     answers.push(data);
                     cb();
                 }).catch(function(err) {
