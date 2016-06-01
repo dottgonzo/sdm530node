@@ -49,7 +49,7 @@ function readReg(client, reg: number) {
 
 
 function start(config, client) {
-
+console.log(config)
     return new Promise(function(resolve, reject) {
         let answer = <any>{
             grid: {},
@@ -134,7 +134,7 @@ class SdM {
         return this.latest;
     }
 
-    data(callback?: Function, interval?: number) {
+    data(call?: Function, interval?: number) {
 
 
         let that = this;
@@ -363,7 +363,7 @@ class SdM {
                 if (err) {
                     console.log(err);
                 } else {
-                    callback(answers);
+                    call(answers);
                 }
             });
 
