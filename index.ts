@@ -378,7 +378,7 @@ class SdM {
                 console.log(date);
 
                 if (new Date().getTime() > (date.unixtime - 90000)) {
-                    console.log("valid");
+                    console.log("time is valid from now");
                     that.validDate = true;
                 } else {
                     checkRemote();
