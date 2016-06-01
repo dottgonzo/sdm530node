@@ -142,9 +142,19 @@ class SdM {
                 reg: 52
             },
             {
-                label: "allPower",
+                label: "maxPower",
+                phase: 0,
+                reg: 86
+            },
+            {
+                label: "ExpAllPower",
                 phase: 0,
                 reg: 74
+            },
+            {
+                label: "ImpAllPower",
+                phase: 0,
+                reg: 72
             }
         ];
 
