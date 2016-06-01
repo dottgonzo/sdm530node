@@ -87,74 +87,88 @@ class SdM {
 
         let regs = [
             {
-                label: "volt",
+                label: "voltage",
                 phase: 1,
-                reg: 0
+                reg: 0,
+                group: "strings"
             },
             {
-                label: "volt",
+                label: "voltage",
                 phase: 2,
-                reg: 2
+                reg: 2,
+                group: "strings"
             },
             {
-                label: "volt",
+                label: "voltage",
                 phase: 3,
-                reg: 4
+                reg: 4,
+                group: "strings"
             },
             {
                 label: "current",
                 phase: 1,
-                reg: 6
+                reg: 6,
+                group: "strings"
             },
             {
                 label: "current",
                 phase: 2,
-                reg: 8
+                reg: 8,
+                group: "strings"
             },
             {
                 label: "current",
                 phase: 3,
-                reg: 10
+                reg: 10,
+                group: "strings"
             },
             {
                 label: "power",
                 phase: 1,
-                reg: 12
+                reg: 12,
+                group: "strings"
             },
             {
                 label: "power",
                 phase: 2,
-                reg: 14
+                reg: 14,
+                group: "strings"
             },
             {
                 label: "power",
                 phase: 3,
-                reg: 16
+                reg: 16,
+                group: "strings"
             },
             {
-                label: "frequency",
+                label: "hz",
                 phase: 0,
-                reg: 70
+                reg: 70,
+                group: "grid"
             },
             {
-                label: "totalPower",
+                label: "power",
                 phase: 0,
-                reg: 52
+                reg: 52,
+                group: "grid"
             },
             {
-                label: "maxPower",
+                label: "peakMax",
                 phase: 0,
-                reg: 86
+                reg: 86,
+                group: "main"
             },
             {
                 label: "ExpAllPower",
                 phase: 0,
-                reg: 74
+                reg: 74,
+                group: "main"
             },
             {
                 label: "ImpAllPower",
                 phase: 0,
-                reg: 72
+                reg: 72,
+                group: "main"
             }
         ];
 
@@ -181,21 +195,26 @@ class SdM {
 
                 readReg(that.client, iterator.reg).then(function(d) {
 
-                    if (iterator.phase) {
+                    if (iterator.group === "strings") {
+
                         if (!answer.strings) {
                             answer.strings = [];
                         }
+                        if (!answer.strings[iterator.phase - 1]) {
+                            answer.strings[iterator.phase - 1] = {};
+                        }
                         answer.strings[iterator.phase - 1][iterator.label] = d;
 
-                    } else {
+                    } else if (iterator.group === "grid") {
                         if (!answer.grid) {
                             answer.grid = {};
                         }
                         answer.grid[iterator.label] = d;
+                    } else if (iterator.group === "main") {
+                        answer[iterator.label] = d;
 
                     }
 
-                    answer[iterator.label + iterator.phase] = d;
 
 
                     cb();
