@@ -348,6 +348,9 @@ class SdM {
                     }
                     that.latest = answer;
                 } else {
+                    
+                    console.log(answer);
+
                     console.log("malformed data");
                 }
 
