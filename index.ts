@@ -87,6 +87,9 @@ class SdM {
                 }).catch(function() {
                     throw "NO USB FOR SDM";
                 });
+            } else {
+                that.conf = defaults;
+
             }
 
         } else {
