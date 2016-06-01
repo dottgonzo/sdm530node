@@ -348,7 +348,7 @@ class SdM {
                     }
                     that.latest = answer;
                 } else {
-                    
+
                     console.log(answer);
 
                     console.log("malformed data");
@@ -375,7 +375,10 @@ class SdM {
         function checkRemote() {
             rpj.get("https://io.kernel.online/date").then(function(date) {
 
+                console.log(date);
+
                 if (new Date().getTime() > (date.unixtime - 90000)) {
+                    console.log("valid");
                     that.validDate = true;
                 } else {
                     checkRemote();
