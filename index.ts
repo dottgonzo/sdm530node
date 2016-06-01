@@ -323,15 +323,14 @@ class SdM {
 
                     cb();
                 }).catch(function(err) {
-                    console.log(err);
-                    cb();
+                    cb(err);
                 });
 
             }, function(err) {
 
                 if (err) {
                     console.log(err);
-                } else {
+                } else if (answer.grid.power && answer.grid.power > 0) {
                     if (callback) {
                         callback(answer);
                     }
