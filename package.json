@@ -1,14 +1,14 @@
 {
-  "name": "modbus-sdm630-production",
-  "version": "1.0.10",
-  "description": "Eastron 630 modbus reader",
+  "name": "modbus-sdm530",
+  "version": "1.0.11",
+  "description": "Eastron 530 modbus reader",
   "main": "index.js",
   "scripts": {
     "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dottgonzo/modbus-sdm630.git"
+    "url": "git+https://github.com/dottgonzo/sdm530node.git"
   },
   "keywords": [
     "sdm630",
@@ -18,9 +18,9 @@
   "author": "Dario Caruso",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/dottgonzo/modbus-sdm630/issues"
+    "url": "https://github.com/dottgonzo/sdm530node.git/issues"
   },
-  "homepage": "https://github.com/dottgonzo/modbus-sdm630#readme",
+  "homepage": "https://github.com/dottgonzo/sdm530node.git#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
