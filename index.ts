@@ -311,7 +311,7 @@ class SdM {
             let answer = <any>{
                 uid: that.conf.uid,
                 address: that.conf.address,
-                model: "Socomec & sdm630",
+                model: "sdm530",
                 firmware: require("./package.json").version,
                 active: true,
                 grid: {},
